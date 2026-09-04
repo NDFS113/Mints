@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTINEL-IoT | Threat Intelligence</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+
+        <!-- Sidebar Navigation (Glass) -->
+        <aside class="sidebar glass">
+            <div class="brand">
+                <div class="logo-icon">
+                    <span class="material-icons-round">security</span>
+                </div>
+                <div class="brand-text">SENTINEL<span class="brand-highlight">IoT</span></div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <span class="material-icons-round">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">radar</span>
+                    Live Feed
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">bug_report</span>
+                    Campaigns
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">analytics</span>
+                    Analytics
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-icons-round">settings</span>
+                    Settings
+                </a>
+            </nav>
+
+            <div class="user-profile">
+                <div class="avatar">AD</div>
+                <div class="user-info">
+                    <span class="name">Admin User</span>
+                    <span class="role">Security Analyst</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar glass reveal-on-scroll">
+                <div class="breadcrumbs">
+                    <span>Platform</span> / <span class="current">Overview</span>
+                </div>
+                <div class="system-status">
+                    <span class="status-dot pulse"></span>
+                    <span class="status-text">System Optimal</span>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="hero-section reveal-on-scroll">
+                    <div class="hero-text">
+                        <h1>Network Overview</h1>
+                        <p>Real-time telemetry from global sensor nodes.</p>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary">
+                            <span class="material-icons-round">download</span> Export Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="dashboard-grid">
+                    <div class="card glass reveal-on-scroll delay-1">
+                        <div class="card-header">
+                            <span class="icon-box danger-soft">
+                                <span class="material-icons-round">gpp_bad</span>
+                            </span>
+                            <span class="trend up">+12% <span class="material-icons-round">trending_up</span></span>
+                        </div>
+                        <div class="stat-value">{{ stats.attacks_today }}</div>
+                        <div class="stat-label">Attacks Detected Today</div>
+                    </div>
+
+                    <div class="card glass reveal-on-scroll delay-2">
+                        <div class="card-header">
+                            <span class="icon-box primary-soft">
+                                <span class="material-icons-round">hub</span>
+                            </span>
+                            <span class="trend neutral">Active</span>
+                        </div>
+                        <div class="stat-value">{{ stats.active_campaigns }}</div>
+                        <div class="stat-label">Active Campaigns</div>
+                    </div>
+
+                    <div class="card glass reveal-on-scroll delay-3">
+                        <div class="card-header">
+                            <span class="icon-box warning-soft">
+                                <span class="material-icons-round">public</span>
+                            </span>
+                            <span class="trend">Top Source</span>
+                        </div>
+                        <div class="stat-value smaller">{{ stats.top_country }}</div>
+                        <div class="stat-label">Primary Threat Origin</div>
+                    </div>
+
+                    <div class="card glass reveal-on-scroll delay-4">
+                        <div class="card-header">
+                            <span class="icon-box success-soft">
+                                <span class="material-icons-round">api</span>
+                            </span>
+                            <span class="trend success">Healthy</span>
+                        </div>
+                        <div class="stat-value">Online</div>
+                        <div class="stat-label">Threat Intel Feed</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="section-container glass reveal-on-scroll delay-5">
+                    <div class="section-header">
+                        <h2>Recent Interceptions</h2>
+                        <button class="btn btn-icon">
+                            <span class="material-icons-round">filter_list</span>
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Source Entity</th>
+                                    <th>Target Vector</th>
+                                    <th>Signature</th>
+                                    <th>Classification</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if stats.recent_activity %}
+                                {% for row in stats.recent_activity %}
+                                <tr>
+                                    <td>
+                                        <div class="ip-address">
+                                            <span class="material-icons-round ip-icon">router</span>
+                                            {{ row.source }}
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-neutral">{{ row.port }}</span></td>
+                                    <td><span class="code-font">{{ row.signature }}</span></td>
+                                    <td><span class="status-pill success">{{ row.status }}</span></td>
+                                    <td class="text-muted">{{ row.timestamp }}</td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="5"
+                                        style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                        Waiting for telemetry... Attack sensors are listening.
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Scroll Reveal Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Auto-Refresh Page every 30 seconds for live data
+        setTimeout(() => {
+            window.location.reload();
+        }, 30000);
+    </script>
+</body>
+
+</html>
